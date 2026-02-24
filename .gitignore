@@ -1,0 +1,27 @@
+# Ignore Maven/Gradle build output
+target/
+build/
+
+# Ignore IDE files
+.idea/
+.classpath
+.project
+.settings/
+.vscode/
+
+# Ignore OS files
+*.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore all markdown files except README.md
+*.md
+!README.md
+
+# Ignore environment and config files
+application-*.properties
+application-*.yml
+application-*.yaml
+.env
