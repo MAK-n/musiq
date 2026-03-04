@@ -3,11 +3,9 @@ target/
 build/
 
 # Ignore IDE files
-.idea/
-.classpath
-.project
-.settings/
-.vscode/
+.*
+!.gitignore
+!.gitattributes
 
 # Ignore OS files
 *.DS_Store

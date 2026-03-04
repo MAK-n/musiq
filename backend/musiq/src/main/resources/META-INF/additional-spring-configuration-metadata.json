@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "spotify.client.id",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.client.id'"
+  },
+  {
+    "name": "spotify.client.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.client.secret'"
+  },
+  {
+    "name": "spotify.redirect-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.redirect-uri'"
+  },
+  {
+    "name": "spotify.authorization-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.authorization-uri'"
+  },
+  {
+    "name": "spotify.token-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.token-uri'"
+  },
+  {
+    "name": "spotify.scopes",
+    "type": "java.lang.String",
+    "description": "A description for 'spotify.scopes'"
+  }
+]}

@@ -8,6 +8,7 @@ class MusiqApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("${SPRING_DATASOURCE_URL}");
 	}
 
 }

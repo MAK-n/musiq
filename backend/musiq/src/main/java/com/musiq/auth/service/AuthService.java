@@ -1,0 +1,64 @@
+package com.musiq.auth.service;
+
+import java.time.Instant;
+
+import org.springframework.stereotype.Service;
+
+import com.musiq.auth.dto.AuthResponseDto;
+import com.musiq.spotify.dto.SpotifyTokenResponse;
+import com.musiq.spotify.dto.SpotifyUserProfileDto;
+import com.musiq.spotify.service.SpotifyService;
+import com.musiq.user.User;
+import com.musiq.user.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+    private final UserRepository userRepository;
+    private final SpotifyService spotifyService;
+    private final JwtService jwtService;
+
+    public AuthResponseDto handleSpotifyCallback(String code) {
+        // 1- Exchange code for tokens
+        SpotifyTokenResponse tokenResponse = spotifyService.exchangeCodeForTokens(code);
+
+        // 2- Get user profile
+        SpotifyUserProfileDto userProfile = spotifyService.getCurrentUserProfile(tokenResponse.accessToken());
+        
+        // 3- Create or update user
+        Long spotifyId = Long.parseLong(userProfile.id());
+        User user = userRepository
+        .findBySpotifyId(spotifyId)
+        .map(existingUser -> {
+            existingUser.setDisplayName(userProfile.displayName());
+            existingUser.setAvatarUrl(userProfile.images().get(0).url());
+            existingUser.setUpdatedAt(Instant.now());
+            return existingUser;
+        })
+        .orElseGet(() -> {
+            User newUser = new User();
+            newUser.setSpotifyId(userProfile.id());
+            newUser.setUserName(userProfile.email());
+            newUser.setDisplayName(userProfile.displayName());
+            newUser.setAvatarUrl(userProfile.images().get(0).url());
+            newUser.setCreatedAt(Instant.now());
+            newUser.setUpdatedAt(Instant.now());
+            return newUser;
+        });
+        userRepository.save(user);
+
+        // 4- Generate JWT token
+        String jwt = jwtService.generateToken(user.getId());
+
+        // 5- Return auth dto object response
+        return new AuthResponseDto(
+            jwt,
+            user.getSpotifyId(),
+            user.getDisplayName(),
+            user.getAvatarUrl()
+        );
+
+    }
+}
