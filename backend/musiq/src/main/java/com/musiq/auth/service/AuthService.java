@@ -28,23 +28,29 @@ public class AuthService {
         SpotifyUserProfileDto userProfile = spotifyService.getCurrentUserProfile(tokenResponse.accessToken());
         
         // 3- Create or update user
-        Long spotifyId = Long.parseLong(userProfile.id());
+        String spotifyId = userProfile.id();
         User user = userRepository
         .findBySpotifyId(spotifyId)
         .map(existingUser -> {
             existingUser.setDisplayName(userProfile.displayName());
             existingUser.setAvatarUrl(userProfile.images().get(0).url());
             existingUser.setUpdatedAt(Instant.now());
+            existingUser.setAccessToken(tokenResponse.accessToken());
+            existingUser.setRefreshToken(tokenResponse.refreshToken());
+            existingUser.setExpiresAt(Instant.now().plusSeconds(tokenResponse.expiresIn()));
             return existingUser;
         })
         .orElseGet(() -> {
             User newUser = new User();
-            newUser.setSpotifyId(userProfile.id());
-            newUser.setUserName(userProfile.email());
+            newUser.setSpotifyId(spotifyId);
+            newUser.setEmail(userProfile.email());
             newUser.setDisplayName(userProfile.displayName());
             newUser.setAvatarUrl(userProfile.images().get(0).url());
             newUser.setCreatedAt(Instant.now());
             newUser.setUpdatedAt(Instant.now());
+            newUser.setAccessToken(tokenResponse.accessToken());
+            newUser.setRefreshToken(tokenResponse.refreshToken());
+            newUser.setExpiresAt(Instant.now().plusSeconds(tokenResponse.expiresIn()));
             return newUser;
         });
         userRepository.save(user);

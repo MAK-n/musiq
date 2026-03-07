@@ -1,32 +1,42 @@
 {"properties": [
   {
-    "name": "spotify.client.id",
+    "name": "spotify.client-id",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.client.id'"
+    "description": "Spotify app client ID from developer.spotify.com"
   },
   {
-    "name": "spotify.client.secret",
+    "name": "spotify.client-secret",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.client.secret'"
+    "description": "Spotify app client secret from developer.spotify.com"
   },
   {
     "name": "spotify.redirect-uri",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.redirect-uri'"
+    "description": "OAuth callback URL registered in Spotify dashboard"
   },
   {
     "name": "spotify.authorization-uri",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.authorization-uri'"
+    "description": "Spotify OAuth authorization endpoint URL"
   },
   {
     "name": "spotify.token-uri",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.token-uri'"
+    "description": "Spotify OAuth token exchange endpoint URL"
   },
   {
     "name": "spotify.scopes",
     "type": "java.lang.String",
-    "description": "A description for 'spotify.scopes'"
+    "description": "Space-separated list of Spotify permission scopes"
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Base64 encoded secret key for signing JWT tokens"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "JWT token expiration time in milliseconds e.g. 86400000 for 24 hours"
   }
 ]}

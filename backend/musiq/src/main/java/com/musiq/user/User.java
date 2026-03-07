@@ -28,8 +28,6 @@ public class User {
     @Column(name = "spotify_id", nullable = false, unique = true)
     private String spotifyId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String userName;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "display_name", nullable = false)
@@ -40,5 +38,11 @@ public class User {
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+    @Column(name = "access_token")
+    private String accessToken;
+    @Column(name = "refresh_token")
+    private String refreshToken;
+    @Column(name = "expires_at")
+    private Instant expiresAt;
     
 }
