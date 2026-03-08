@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.musiq.user.User;
-import com.musiq.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

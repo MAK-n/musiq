@@ -1,8 +1,5 @@
 package com.musiq.security;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -52,8 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //5. extract userId from token
         Long userId = jwtService.extractUserId(token);
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -62,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             user, // the user object
             null, // credentials - null since jwt is used
-            List.of() // authorities/roles - empty for now
+            user.getAuthorities() // authorities/roles - empty for now
         );
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
