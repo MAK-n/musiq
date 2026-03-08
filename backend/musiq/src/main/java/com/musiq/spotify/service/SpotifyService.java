@@ -1,5 +1,6 @@
 package com.musiq.spotify.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,14 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpotifyService {
     private final SpotifyProperties spotifyProperties;
-    private final WebClient webClient;
 
-    public SpotifyService(SpotifyProperties spotifyProperties, WebClient.Builder webClientBuilder) {
-        this.spotifyProperties = spotifyProperties;
-        this.webClient = webClientBuilder
-            .baseUrl("https://api.spotify.com/v1")
-            .build();
-    }
+    @Qualifier("spotifyApiClient")
+    private final WebClient spotifyApiClient;
+    
+    @Qualifier("spotifyTokenClient")
+    private final WebClient spotifyTokenClient;
+
     
     public SpotifyTokenResponse exchangeCodeForTokens(String code){
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
@@ -34,9 +34,8 @@ public class SpotifyService {
         formData.add("client_secret", spotifyProperties.getClientSecret());
         
 
-        return webClient
+        return spotifyTokenClient
         .post()
-        .uri(spotifyProperties.getTokenUri())
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         .bodyValue(formData)
         .retrieve()
@@ -45,7 +44,7 @@ public class SpotifyService {
     }
 
     public SpotifyUserProfileDto getCurrentUserProfile(String accessToken){
-        return webClient
+        return spotifyApiClient
         .get()
         .uri("/me")
         .headers(headers -> headers.setBearerAuth(accessToken))
