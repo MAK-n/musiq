@@ -33,7 +33,7 @@ public class AuthService {
         .findBySpotifyId(spotifyId)
         .map(existingUser -> {
             existingUser.setDisplayName(userProfile.displayName());
-            existingUser.setAvatarUrl(userProfile.images().get(0).url());
+            existingUser.setAvatarUrl(userProfile.images().isEmpty() ? null : userProfile.images().get(0).url());
             existingUser.setUpdatedAt(Instant.now());
             existingUser.setAccessToken(tokenResponse.accessToken());
             existingUser.setRefreshToken(tokenResponse.refreshToken());
@@ -45,7 +45,7 @@ public class AuthService {
             newUser.setSpotifyId(spotifyId);
             newUser.setEmail(userProfile.email());
             newUser.setDisplayName(userProfile.displayName());
-            newUser.setAvatarUrl(userProfile.images().get(0).url());
+            newUser.setAvatarUrl(userProfile.images().isEmpty() ? null : userProfile.images().get(0).url());
             newUser.setCreatedAt(Instant.now());
             newUser.setUpdatedAt(Instant.now());
             newUser.setAccessToken(tokenResponse.accessToken());
