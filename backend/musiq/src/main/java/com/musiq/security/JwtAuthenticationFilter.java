@@ -1,5 +1,7 @@
 package com.musiq.security;
 
+import java.io.IOException;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -10,7 +12,7 @@ import com.musiq.auth.service.JwtService;
 import com.musiq.user.User;
 import com.musiq.user.UserRepository;
 
-import io.jsonwebtoken.io.IOException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
