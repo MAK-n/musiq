@@ -1,7 +1,10 @@
 package com.musiq.auth.controller;
 
+import java.net.URI;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +25,9 @@ public class SpotifyAuthController {
     private final SpotifyProperties spotifyProperties;
     private final AuthService authService;
     
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
     @GetMapping("/login")
     public Map<String, String> login() {
         String uri = buildAuthorizationUri();
@@ -40,12 +46,16 @@ public class SpotifyAuthController {
     }
 
     @GetMapping("/callback")
-    public AuthResponseDto callback(@RequestParam String code,
+    public ResponseEntity<?> callback(@RequestParam String code,
         @RequestParam(required = false) String error
     ) {
-        if(error != null) {
-            throw new RuntimeException("Error: " + error);
+        if(error != null){
+            return ResponseEntity.badRequest().body(new AuthResponseDto(null, null, null, null));
         }
-        return authService.handleSpotifyCallback(code);
+        AuthResponseDto response = authService.handleSpotifyCallback(code);
+        return ResponseEntity
+        .status(302)
+        .location(URI.create(frontendUrl + "/callback?jwt=" + response.token()))
+        .build();
     }
 }

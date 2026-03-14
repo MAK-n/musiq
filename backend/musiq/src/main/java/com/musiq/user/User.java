@@ -43,9 +43,9 @@ public class User implements UserDetails{
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-    @Column(name = "access_token")
+    @Column(name = "access_token", length = 1000)
     private String accessToken;
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token", length = 512)
     private String refreshToken;
     @Column(name = "expires_at")
     private Instant expiresAt;

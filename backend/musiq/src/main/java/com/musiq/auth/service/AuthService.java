@@ -28,7 +28,7 @@ public class AuthService {
         SpotifyUserProfileDto userProfile = spotifyService.getCurrentUserProfile(tokenResponse.accessToken());
         
         // 3- Create or update user
-        String spotifyId = userProfile.id();
+        String spotifyId = userProfile.spotifyId();
         User user = userRepository
         .findBySpotifyId(spotifyId)
         .map(existingUser -> {
