@@ -1,6 +1,7 @@
 package com.musiq.spotify.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -8,7 +9,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.musiq.spotify.config.SpotifyProperties;
+import com.musiq.spotify.dto.SpotifyArtistDto;
+import com.musiq.spotify.dto.SpotifyRecentlyPlayedDto;
 import com.musiq.spotify.dto.SpotifyTokenResponse;
+import com.musiq.spotify.dto.SpotifyTopItemsDto;
+import com.musiq.spotify.dto.SpotifyTrackDto;
 import com.musiq.spotify.dto.SpotifyUserProfileDto;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +48,22 @@ public class SpotifyService {
         .block();
     }
 
+    public SpotifyTokenResponse refreshAccessToken(String refreshToken){
+        MultiValueMap<String, String> formdata = new LinkedMultiValueMap<String, String>();
+        formdata.add("grant_type", "refresh_token");
+        formdata.add("refresh_token", refreshToken);
+        formdata.add("client_id", spotifyProperties.getClientId());
+        formdata.add("client_secret", spotifyProperties.getClientSecret());
+    
+        return spotifyTokenClient
+        .post()
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        .bodyValue(formdata)
+        .retrieve()
+        .bodyToMono(SpotifyTokenResponse.class)
+        .block();
+    }
+    
     public SpotifyUserProfileDto getCurrentUserProfile(String accessToken){
         return spotifyApiClient
         .get()
@@ -50,6 +71,50 @@ public class SpotifyService {
         .headers(headers -> headers.setBearerAuth(accessToken))
         .retrieve()
         .bodyToMono(SpotifyUserProfileDto.class)
+        .block();
+    }
+
+    public SpotifyTopItemsDto<SpotifyTrackDto> getTopTracks(String accessToken, String timeRange){
+        return spotifyApiClient
+        .get()
+        .uri(uriBuilder -> uriBuilder
+            .path("/me/top/tracks")
+            .queryParam("time_range", timeRange)
+            .queryParam("limit", "50")
+            .build()
+        )
+        .headers(headers -> headers.setBearerAuth(accessToken))
+        .retrieve()
+        .bodyToMono(new ParameterizedTypeReference<SpotifyTopItemsDto<SpotifyTrackDto>>() {})
+        .block();
+    }
+
+    public SpotifyTopItemsDto<SpotifyArtistDto> getTopArtists(String accessToken, String timeRange){
+        return spotifyApiClient
+        .get()
+        .uri(uriBuilder -> uriBuilder
+            .path("/me/top/artists")
+            .queryParam("time_range", timeRange)
+            .queryParam("limit", "50")
+            .build()
+        )
+        .headers(headers -> headers.setBearerAuth(accessToken))
+        .retrieve()
+        .bodyToMono(new ParameterizedTypeReference<SpotifyTopItemsDto<SpotifyArtistDto>>() {})
+        .block();
+    }
+
+    public SpotifyRecentlyPlayedDto getRecentlyPlayed(String accessToken){
+        return spotifyApiClient
+        .get()
+        .uri(uriBuilder -> uriBuilder
+            .path("/me/player/recently-played")
+            .queryParam("limit", "50")
+            .build()
+        )
+        .headers(headers -> headers.setBearerAuth(accessToken))
+        .retrieve()
+        .bodyToMono(new ParameterizedTypeReference<SpotifyRecentlyPlayedDto>() {})
         .block();
     }
 }

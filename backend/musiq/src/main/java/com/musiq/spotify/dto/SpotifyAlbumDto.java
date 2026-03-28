@@ -1,0 +1,11 @@
+package com.musiq.spotify.dto;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record SpotifyAlbumDto(
+    @JsonProperty("id") String id,
+    @JsonProperty("name") String name,
+    @JsonProperty("image") List<ImageDto> images
+) {}
