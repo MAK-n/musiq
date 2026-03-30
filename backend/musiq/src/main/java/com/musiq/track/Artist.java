@@ -1,9 +1,5 @@
 package com.musiq.track;
 
-import java.util.List;
-
-import com.musiq.spotify.dto.ImageDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +30,6 @@ public class Artist {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "images")
-    private List<ImageDto> images;
+    @Column(name = "image_url")
+    private String imageUrl;
 }

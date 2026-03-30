@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Table(name = "play_records")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayRecord {
@@ -35,9 +37,9 @@ public class PlayRecord {
     private User user;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "song_id")
-    private Song songId;
+    @JoinColumn(name = "song_id", nullable = false)
+    private Song song;
 
-    @Column(name = "played_at")
+    @Column(name = "played_at", nullable = false)
     private Instant playedAt;
 }

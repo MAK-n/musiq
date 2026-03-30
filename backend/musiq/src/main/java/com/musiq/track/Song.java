@@ -2,17 +2,18 @@ package com.musiq.track;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
+import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Table(name = "songs")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Song {
@@ -35,7 +37,7 @@ public class Song {
     private String name;
     
     @Column(name = "duration_ms", nullable = false)
-    private Long durationMs;
+    private long durationMs;
     
     @Column(name = "image_url")
     private String imageUrl;
@@ -50,7 +52,7 @@ public class Song {
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
 
-    @ManyToOne
+    @ManyToMany
     @JoinTable(
         name = "track_artists",
         joinColumns = @JoinColumn(name = "song_id"),

@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ArtistRepository extends JpaRepository<Song, Long>{
+public interface ArtistRepository extends JpaRepository<Artist, Long>{
     boolean existsBySpotifyId(String spotifyId);
-    Optional<Song> findBySpotifyId(String spotifyId);
-    Optional<Song> findById(Long id);
+    Optional<Artist> findBySpotifyId(String spotifyId);
+    Optional<Artist> findById(Long id);
 }
