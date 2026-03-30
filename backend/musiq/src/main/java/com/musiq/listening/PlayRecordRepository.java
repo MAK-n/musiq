@@ -10,7 +10,7 @@ import com.musiq.user.User;
 
 public interface PlayRecordRepository extends JpaRepository<PlayRecord, Long> {
     List<PlayRecord> findByUserIdOrderByPlayedAtDesc(Long userId);
-    List<PlayRecord> findBySong(String song);
+    List<PlayRecord> findBySong(Song song);
     List<PlayRecord> findByPlayedAtBetween(Instant start, Instant end);
     List<PlayRecord> findByPlayedAtAfter(Instant start);
     List<PlayRecord> findByPlayedAtBefore(Instant end);
