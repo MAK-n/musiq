@@ -74,11 +74,14 @@ public class SpotifySyncService {
             List<Artist> artists = syncArtists(item.track().artists());
             Song song = syncSong(item.track(), album, artists);
 
-            PlayRecord record = new PlayRecord();
-            record.setUser(user);
-            record.setSong(song);
-            record.setPlayedAt(Instant.parse(item.playedAt().toString()));
-            playRecordRepository.save(record);
+            if (!playRecordRepository.existsByUserAndSongAndPlayedAt(user, song, item.playedAt())) {
+                PlayRecord record = PlayRecord.builder()
+                    .user(user)
+                    .song(song)
+                    .playedAt(item.playedAt())
+                    .build();
+                playRecordRepository.save(record);
+            }
         }
     }
 
