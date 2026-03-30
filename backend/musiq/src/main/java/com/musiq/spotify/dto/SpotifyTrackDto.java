@@ -11,6 +11,5 @@ public record SpotifyTrackDto (
     @JsonProperty("artists") List<SpotifyArtistDto> artists,
     @JsonProperty("duration_ms") Long durationMs,
     @JsonProperty("preview_url") String previewUrl,
-    @JsonProperty("image_url") String imageUrl,
     @JsonProperty("explicit") Boolean explicit
 ){}

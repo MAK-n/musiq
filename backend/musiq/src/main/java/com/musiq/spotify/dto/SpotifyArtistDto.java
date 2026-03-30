@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record SpotifyArtistDto(
     @JsonProperty("id") String id,
     @JsonProperty("name") String name,
-    @JsonProperty("image") List<ImageDto> images
+    @JsonProperty("images") List<ImageDto> images
 ) {}

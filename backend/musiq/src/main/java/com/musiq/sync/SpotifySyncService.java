@@ -88,14 +88,16 @@ public class SpotifySyncService {
         return albumRepository.findBySpotifyId(albumDto.id())
             .map(existing -> {
                 existing.setName(albumDto.name());
-                existing.setImageUrl(albumDto.images().isEmpty() ? null : albumDto.images().get(0).url());
+                existing.setImageUrl(albumDto.images() == null || albumDto.images().isEmpty()
+                    ? null : albumDto.images().get(0).url());
                 existing.setReleaseDate(albumDto.releaseDate());
                 return albumRepository.save(existing);
             })
             .orElseGet(() -> albumRepository.save(Album.builder()
                 .spotifyId(albumDto.id())
                 .name(albumDto.name())
-                .imageUrl(albumDto.images().isEmpty() ? null : albumDto.images().get(0).url())
+                .imageUrl(albumDto.images() == null || albumDto.images().isEmpty()
+                    ? null : albumDto.images().get(0).url())
                 .releaseDate(albumDto.releaseDate())
                 .build()
             ));
@@ -128,9 +130,10 @@ public class SpotifySyncService {
         return songRepository.findBySpotifyId(trackDto.id())
             .map(existing -> {
                 existing.setName(trackDto.name());
-                existing.setDurationMs(trackDto.durationMs());
+                existing.setDurationMs(trackDto.durationMs().intValue());
                 existing.setPreviewUrl(trackDto.previewUrl());
                 existing.setExplicit(trackDto.explicit());
+                existing.setImageUrl(album.getImageUrl());
                 existing.setAlbum(album);
                 existing.setArtists(artists);
                 return songRepository.save(existing);
@@ -138,9 +141,10 @@ public class SpotifySyncService {
             .orElseGet(() -> songRepository.save(Song.builder()
                 .spotifyId(trackDto.id())
                 .name(trackDto.name())
-                .durationMs(trackDto.durationMs())
+                .durationMs(trackDto.durationMs().intValue())
                 .previewUrl(trackDto.previewUrl())
                 .explicit(trackDto.explicit())
+                .imageUrl(album.getImageUrl())
                 .album(album)
                 .artists(artists)
                 .build()

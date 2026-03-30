@@ -7,6 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record SpotifyAlbumDto(
     @JsonProperty("id") String id,
     @JsonProperty("name") String name,
-    @JsonProperty("image") List<ImageDto> images,
+    @JsonProperty("images") List<ImageDto> images,
     @JsonProperty("release_date") String releaseDate
 ){}
