@@ -8,6 +8,7 @@ import com.musiq.auth.dto.AuthResponseDto;
 import com.musiq.spotify.dto.SpotifyTokenResponse;
 import com.musiq.spotify.dto.SpotifyUserProfileDto;
 import com.musiq.spotify.service.SpotifyService;
+import com.musiq.sync.SpotifySyncService;
 import com.musiq.user.User;
 import com.musiq.user.UserRepository;
 
@@ -19,6 +20,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final SpotifyService spotifyService;
     private final JwtService jwtService;
+    private final SpotifySyncService spotifySyncService;
 
     public AuthResponseDto handleSpotifyCallback(String code) {
         // 1- Exchange code for tokens
@@ -55,10 +57,13 @@ public class AuthService {
         });
         userRepository.save(user);
 
-        // 4- Generate JWT token
+        // 4 - Sync User Data
+        spotifySyncService.syncRecentlyPlayed(user);
+
+        // 5- Generate JWT token
         String jwt = jwtService.generateToken(user.getId());
 
-        // 5- Return auth dto object response
+        // 6- Return auth dto object response
         return new AuthResponseDto(
             jwt,
             user.getSpotifyId(),

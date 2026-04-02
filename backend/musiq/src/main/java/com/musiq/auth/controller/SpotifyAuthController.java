@@ -42,7 +42,8 @@ public class SpotifyAuthController {
             .queryParam("redirect_uri", spotifyProperties.getRedirectUri())
             .queryParam("scope", spotifyProperties.getScopes())
             .build()
-            .toString();
+            .encode()
+            .toUriString();
     }
 
     @GetMapping("/callback")

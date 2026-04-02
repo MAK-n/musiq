@@ -2,6 +2,7 @@ package com.musiq.sync;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,7 +110,7 @@ public class SpotifySyncService {
     private List<Artist> syncArtists(List<SpotifyArtistDto> artistDtos) {
         return artistDtos.stream()
             .map(this::syncArtist)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     private Artist syncArtist(SpotifyArtistDto artistDto) {
