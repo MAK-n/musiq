@@ -1,0 +1,131 @@
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+.card {
+    background-color: #121212;
+    border: 1px solid #282828;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #282828 transparent;
+    padding-bottom: 6px;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    min-width: 120px;
+    max-width: 120px;
+    flex-shrink: 0;
+    background-color: #181818;
+    border: 1px solid #282828;
+}
+
+.item:hover {
+    background-color: #222222;
+}
+
+.thumbnail {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.info {
+    width: 100%;
+    min-width: 0;
+}
+
+.trackName {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.artistName {
+    font-size: 11px;
+    color: #a7a7a7;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.timeAgo {
+    font-size: 10px;
+    color: #535353;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.skeletonRow {
+    min-width: 120px;
+    max-width: 120px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #181818;
+    border: 1px solid #282828;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeletonThumb {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.skeletonLine {
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.error {
+    font-size: 13px;
+    color: #a7a7a7;
+}

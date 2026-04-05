@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import musiqClient from "../api/musiqClient";
 import { useNavigate } from "react-router-dom";
+import ProfileHeader from "../components/profile/ProfileHeader";
+import TopTrackList from "../components/profile/TopTrackList";
+import TopArtistsList from "../components/profile/TopArtistsList";
+import RecentlyPlayed from "../components/profile/RecentlyPlayed";
+import styles from './ProfilePage.module.css';
 
 interface User {
     id: number;
@@ -34,11 +39,15 @@ export default function ProfilePage() {
     if(!user) return <div>Loading...</div>;
     
     return (
-        <div>
-            <h1>Profile</h1>
-            <p>Welcome, {user.displayName}</p>
-            <p>Email: {user.email}</p>
-            <p>Spotify ID: {user.spotifyId}</p>
+        <div className={styles.page}>
+            <ProfileHeader />
+            <div className={styles.panel}>
+                <RecentlyPlayed />
+                <div className={styles.row}>
+                    <TopArtistsList />
+                    <TopTrackList />
+                </div>
+            </div>
         </div>
     );
 }

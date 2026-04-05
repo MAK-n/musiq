@@ -1,0 +1,33 @@
+.page {
+    padding: 16px 24px 40px;
+    background-color: #090909;
+    min-height: calc(100vh - 60px);
+}
+
+.panel {
+    display: flex;  
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Prevent grid cells from expanding beyond 1fr when content overflows */
+.row > * {
+    min-width: 0;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 0 12px 32px;
+    }
+    .row {
+        grid-template-columns: 1fr;
+    }
+}

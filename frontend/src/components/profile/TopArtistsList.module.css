@@ -1,0 +1,212 @@
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+.card {
+    background-color: #121212;
+    border: 1px solid #282828;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+/* ── Grid size toggle ── */
+.gridToggle {
+    display: flex;
+    gap: 2px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.gridBtn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: #a7a7a7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.gridBtnActive {
+    background-color: #1DB954;
+    color: #fff;
+}
+
+/* ── Range tabs ── */
+.tabs {
+    display: flex;
+    gap: 2px;
+    background-color: #1e1e1e;
+    border-radius: 20px;
+    padding: 3px;
+    align-self: flex-start;
+}
+
+.tab {
+    padding: 5px 12px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+    color: #a7a7a7;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.tabActive {
+    background-color: #2a2a2a;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ── Grid layouts ── */
+.grid2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.grid4x4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ── Artist card ── */
+.artistCard {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #282828;
+}
+
+.artistCard:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+.artistCard:first-child {
+    border-color: #1DB954;
+    box-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
+}
+
+.artistImage {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+}
+
+/* Badge — default size (4×4) */
+.badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+/* Artist name — default size (4×4) */
+.artistName {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 14px 4px 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* Larger text for 2×2 cards */
+.grid2x2 .artistName {
+    font-size: 13px;
+    padding: 22px 8px 8px;
+}
+
+.grid2x2 .badge {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    top: 6px;
+    left: 6px;
+}
+
+/* ── Skeleton ── */
+.skeletonCard {
+    border-radius: 8px;
+    aspect-ratio: 1;
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.error {
+    font-size: 13px;
+    color: #a7a7a7;
+}
+
+/* ── Mobile: 4×4 collapses to 2 columns ── */
+@media (max-width: 600px) {
+    .grid4x4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .tab {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+}
