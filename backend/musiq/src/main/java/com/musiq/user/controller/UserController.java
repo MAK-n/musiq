@@ -44,23 +44,46 @@ public class UserController {
             user.getAvatarUrl()
         ));
     }
+    
+    private Instant[] resolveBounds(String range, String from, String to) {
+        if (from != null) {
+            Instant f = Instant.parse(from);
+            Instant t = to != null ? Instant.parse(to) : Instant.now();
+            return new Instant[] { f, t };
+        }
+        Instant now = Instant.now();
+        Instant since = switch (range != null ? range : "day") {
+            case "day" -> now.minus(1, ChronoUnit.DAYS);
+            case "week" -> now.minus(7, ChronoUnit.DAYS);
+            case "month" -> now.minus(30, ChronoUnit.DAYS);
+            case "year" -> now.minus(365, ChronoUnit.DAYS);
+            default -> now.minus(180, ChronoUnit.DAYS);
+        };
+        return new Instant[] { since, now };
+    }
 
     @GetMapping("/top-tracks")
     public ResponseEntity<List<TopTrackDto>> getTopTracks(
-        @RequestParam(defaultValue = "medium_term") String range
+        @RequestParam(required = false) String range,
+        @RequestParam(required = false) String to,
+        @RequestParam(required = false) String from
     ) {
-        List<Song> songs = playRecordRepository.findTopSongsByUser(
-            currentUser(), rangeToInstant(range), PageRequest.of(0, 50)
+        Instant[] bounds = resolveBounds(range, from, to);
+        List<Song> songs = playRecordRepository.findTopSongsByUserBetween(
+            currentUser(), bounds[0], bounds[1], PageRequest.of(0, 50)
         );
         return ResponseEntity.ok(songs.stream().map(this::toTrackDto).toList());
     }
 
     @GetMapping("/top-artists")
     public ResponseEntity<List<TopArtistDto>> getTopArtists(
-        @RequestParam(defaultValue = "medium_term") String range
+        @RequestParam(required = false) String range,
+        @RequestParam(required = false) String to,
+        @RequestParam(required = false) String from
     ) {
-        List<Artist> artists = playRecordRepository.findTopArtistsByUser(
-            currentUser(), rangeToInstant(range), PageRequest.of(0, 50)
+        Instant[] bounds = resolveBounds(range, from, to);
+        List<Artist> artists = playRecordRepository.findTopArtistsByUserBetween(
+            currentUser(), bounds[0], bounds[1], PageRequest.of(0, 50)
         );
         return ResponseEntity.ok(artists.stream()
             .map(a -> new TopArtistDto(a.getSpotifyId(), a.getName(), a.getImageUrl()))
@@ -78,14 +101,6 @@ public class UserController {
 
     private User currentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-    private Instant rangeToInstant(String range) {
-        return switch (range) {
-            case "short_term" -> Instant.now().minus(28, ChronoUnit.DAYS);
-            case "long_term"  -> Instant.now().minus(365, ChronoUnit.DAYS);
-            default           -> Instant.now().minus(180, ChronoUnit.DAYS);
-        };
     }
 
     private TopTrackDto toTrackDto(Song song) {

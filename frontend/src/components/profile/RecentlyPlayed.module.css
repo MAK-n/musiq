@@ -1,11 +1,8 @@
-@keyframes shimmer {
-    0%   { background-position: -400px 0; }
-    100% { background-position:  400px 0; }
-}
+/* @keyframes shimmer lives in shared.css */
 
 .card {
-    background-color: #121212;
-    border: 1px solid #282828;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -16,7 +13,7 @@
 .title {
     font-size: 17px;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
 }
 
@@ -29,7 +26,7 @@
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: #282828 transparent;
+    scrollbar-color: var(--color-border) transparent;
     padding-bottom: 6px;
 }
 
@@ -45,8 +42,8 @@
     min-width: 120px;
     max-width: 120px;
     flex-shrink: 0;
-    background-color: #181818;
-    border: 1px solid #282828;
+    background-color: var(--color-surface-3);
+    border: 1px solid var(--color-border);
 }
 
 .item:hover {
@@ -69,7 +66,7 @@
 .trackName {
     font-size: 12px;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-text);
     margin: 0 0 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -79,7 +76,7 @@
 
 .artistName {
     font-size: 11px;
-    color: #a7a7a7;
+    color: var(--color-text-muted);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -89,7 +86,7 @@
 
 .timeAgo {
     font-size: 10px;
-    color: #535353;
+    color: var(--color-text-dim);
     white-space: nowrap;
     width: 100%;
 }
@@ -100,8 +97,8 @@
     flex-shrink: 0;
     border-radius: 10px;
     overflow: hidden;
-    background-color: #181818;
-    border: 1px solid #282828;
+    background-color: var(--color-surface-3);
+    border: 1px solid var(--color-border);
     padding: 8px;
     display: flex;
     flex-direction: column;
@@ -112,7 +109,7 @@
     width: 100%;
     aspect-ratio: 1;
     border-radius: 6px;
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background: var(--shimmer-gradient);
     background-size: 800px 100%;
     animation: shimmer 1.4s infinite linear;
 }
@@ -120,12 +117,12 @@
 .skeletonLine {
     height: 12px;
     border-radius: 4px;
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background: var(--shimmer-gradient);
     background-size: 800px 100%;
     animation: shimmer 1.4s infinite linear;
 }
 
 .error {
     font-size: 13px;
-    color: #a7a7a7;
+    color: var(--color-text-muted);
 }

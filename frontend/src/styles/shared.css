@@ -1,0 +1,45 @@
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+/* Applied to any skeleton element via className="skeleton" */
+.skeleton {
+    background: var(--shimmer-gradient);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 4px;
+}
+
+/* Shared card surface */
+.profileCard {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Shared card title */
+.cardTitle {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* Shared error */
+.cardError {
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+/* Text overflow utility */
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

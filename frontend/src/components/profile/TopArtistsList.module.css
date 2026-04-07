@@ -1,11 +1,8 @@
-@keyframes shimmer {
-    0%   { background-position: -400px 0; }
-    100% { background-position:  400px 0; }
-}
+/* @keyframes shimmer lives in shared.css */
 
 .card {
-    background-color: #121212;
-    border: 1px solid #282828;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -32,7 +29,7 @@
 .title {
     font-size: 17px;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
 }
 
@@ -40,7 +37,7 @@
 .gridToggle {
     display: flex;
     gap: 2px;
-    background-color: #1e1e1e;
+    background-color: var(--color-surface-2);
     border-radius: 8px;
     padding: 3px;
     flex-shrink: 0;
@@ -51,7 +48,7 @@
     border-radius: 6px;
     border: none;
     background: transparent;
-    color: #a7a7a7;
+    color: var(--color-text-muted);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.4px;
@@ -60,35 +57,8 @@
 }
 
 .gridBtnActive {
-    background-color: #1DB954;
-    color: #fff;
-}
-
-/* ── Range tabs ── */
-.tabs {
-    display: flex;
-    gap: 2px;
-    background-color: #1e1e1e;
-    border-radius: 20px;
-    padding: 3px;
-    align-self: flex-start;
-}
-
-.tab {
-    padding: 5px 12px;
-    border-radius: 16px;
-    border: none;
-    background: transparent;
-    color: #a7a7a7;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.18s;
-}
-
-.tabActive {
-    background-color: #2a2a2a;
-    color: #fff;
-    font-weight: 600;
+    background-color: var(--color-accent);
+    color: var(--color-text);
 }
 
 /* ── Grid layouts ── */
@@ -117,7 +87,7 @@
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid #282828;
+    border: 1px solid var(--color-border);
 }
 
 .artistCard:hover {
@@ -126,7 +96,7 @@
 }
 
 .artistCard:first-child {
-    border-color: #1DB954;
+    border-color: var(--color-accent);
     box-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
 }
 
@@ -143,7 +113,7 @@
     top: 4px;
     left: 4px;
     background-color: rgba(0, 0, 0, 0.75);
-    color: #fff;
+    color: var(--color-text);
     font-size: 9px;
     font-weight: 700;
     width: 18px;
@@ -164,7 +134,7 @@
     padding: 14px 4px 5px;
     font-size: 10px;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-text);
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
     white-space: nowrap;
     overflow: hidden;
@@ -190,23 +160,19 @@
 .skeletonCard {
     border-radius: 8px;
     aspect-ratio: 1;
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background: var(--shimmer-gradient);
     background-size: 800px 100%;
     animation: shimmer 1.4s infinite linear;
 }
 
 .error {
     font-size: 13px;
-    color: #a7a7a7;
+    color: var(--color-text-muted);
 }
 
 /* ── Mobile: 4×4 collapses to 2 columns ── */
 @media (max-width: 600px) {
     .grid4x4 {
         grid-template-columns: repeat(2, 1fr);
-    }
-    .tab {
-        padding: 5px 8px;
-        font-size: 11px;
     }
 }

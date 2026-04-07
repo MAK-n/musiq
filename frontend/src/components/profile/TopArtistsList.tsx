@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { fetchTopArtists } from "../../api/userApi";
+import { fetchTopArtists, type TimeRange } from "../../api/userApi";
 import styles from './TopArtistsList.module.css';
 
 interface Artist {
@@ -9,25 +9,20 @@ interface Artist {
     imageUrl: string;
 }
 
-const RANGES = ['short_term', 'medium_term', 'long_term'];
-const LABELS: Record<string, string> = {
-    short_term: 'Short',
-    medium_term: 'Medium',
-    long_term: 'Long',
-};
+interface Props{
+    timeRange: TimeRange;
+}
 
 type GridSize = '2x2' | '4x4';
 
-export default function TopArtistsList() {
-    const [range, setRange] = useState('medium_term');
+export default function TopArtistsList({timeRange}: Props) {
     const [gridSize, setGridSize] = useState<GridSize>('4x4');
-
     const artistCount = gridSize === '2x2' ? 4 : 16;
     const gridClass = gridSize === '2x2' ? styles.grid2x2 : styles.grid4x4;
 
     const { data, isLoading, isError } = useQuery<Artist[]>({
-        queryKey: ['top-artists', range],
-        queryFn: () => fetchTopArtists(range),
+        queryKey: ['top-artists', timeRange],
+        queryFn: () => fetchTopArtists(timeRange),
     });
 
     return (
@@ -36,30 +31,13 @@ export default function TopArtistsList() {
                 <div className={styles.titleRow}>
                     <h3 className={styles.title}>Top Artists</h3>
                     <div className={styles.gridToggle}>
-                        <button
-                            className={`${styles.gridBtn} ${gridSize === '2x2' ? styles.gridBtnActive : ''}`}
-                            onClick={() => setGridSize('2x2')}>
-                            2×2
-                        </button>
-                        <button
-                            className={`${styles.gridBtn} ${gridSize === '4x4' ? styles.gridBtnActive : ''}`}
-                            onClick={() => setGridSize('4x4')}>
-                            4×4
-                        </button>
+                        <button className={`${styles.gridBtn} ${gridSize === '2x2' ? styles.gridBtnActive : ''}`}
+                            onClick={() => setGridSize('2x2')}>2×2</button>
+                        <button className={`${styles.gridBtn} ${gridSize === '4x4' ? styles.gridBtnActive : ''}`}
+                            onClick={() => setGridSize('4x4')}>4×4</button>
                     </div>
                 </div>
-                <div className={styles.tabs}>
-                    {RANGES.map(r => (
-                        <button
-                            key={r}
-                            className={`${styles.tab} ${range === r ? styles.tabActive : ''}`}
-                            onClick={() => setRange(r)}>
-                            {LABELS[r]}
-                        </button>
-                    ))}
-                </div>
             </div>
-
             {isLoading && (
                 <ul className={gridClass}>
                     {Array.from({ length: artistCount }).map((_, i) => (

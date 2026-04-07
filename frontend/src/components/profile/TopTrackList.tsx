@@ -1,50 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { fetchTopTracks } from "../../api/userApi";
+import { fetchTopTracks, type TimeRange, timeRangeKey } from "../../api/userApi";
 import styles from './TopTrackList.module.css';
 
-interface Artist {
-    name: string;
-}
+interface Artist { name: string; }
+interface Track { spotifyId: string; name: string; imageUrl: string; albumName: string; artists: Artist[]; }
+interface Props { timeRange: TimeRange; }
 
-interface Track{
-    spotifyId: string;
-    name: string;
-    imageUrl: string;
-    albumName: string;
-    artists: Artist[];
-}
-
-const RANGES = ['short_term', 'medium_term', 'long_term'];
-
-const LABELS: Record<string, string> = {
-    short_term: 'Short Term',
-    medium_term: 'Medium Term',
-    long_term: 'Long Term',
-};
-
-export default function TopTrackList(){
-    const [range, setRange] = useState('medium_term');
-
-    const {data, isLoading, isError} = useQuery<Track[]>({
-        queryKey: ['top-tracks', range],
-        queryFn: () => fetchTopTracks(range),
+export default function TopTrackList({ timeRange }: Props) {
+    const { data, isLoading, isError } = useQuery<Track[]>({
+        queryKey: ['top-tracks', timeRangeKey(timeRange)],
+        queryFn: () => fetchTopTracks(timeRange),
     });
 
     return (
         <div className={styles.card}>
             <div className={styles.header}>
                 <h3 className={styles.title}>Top Tracks</h3>
-                <div className={styles.tabs}>
-                    {RANGES.map(r => (
-                        <button
-                            key={r}
-                            className={`${styles.tab} ${range === r ? styles.tabActive : ''}`}
-                            onClick={() => setRange(r)}>
-                            {LABELS[r]}
-                        </button>
-                    ))}
-                </div>
             </div>
             {isLoading && (
                 <ul className={styles.list}>
@@ -76,5 +47,4 @@ export default function TopTrackList(){
             )}
         </div>
     );
-
 }

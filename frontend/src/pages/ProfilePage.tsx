@@ -7,6 +7,8 @@ import TopTrackList from "../components/profile/TopTrackList";
 import TopArtistsList from "../components/profile/TopArtistsList";
 import RecentlyPlayed from "../components/profile/RecentlyPlayed";
 import styles from './ProfilePage.module.css';
+import type { TimeRange } from "../api/userApi";
+import TimeRangeSelector from "../components/profile/TimeRangeSelector";
 
 interface User {
     id: number;
@@ -19,6 +21,10 @@ export default function ProfilePage() {
     const { isAuthenticated, isLoading } = useAuth();
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
+    const [timeRange, setTimeRange] = useState<TimeRange>({
+        mode: 'preset',
+        preset: 'month',
+    });
 
     useEffect(() => {
         if(isLoading) return;
@@ -43,9 +49,10 @@ export default function ProfilePage() {
             <ProfileHeader />
             <div className={styles.panel}>
                 <RecentlyPlayed />
+                <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
                 <div className={styles.row}>
-                    <TopArtistsList />
-                    <TopTrackList />
+                    <TopArtistsList timeRange={timeRange} />
+                    <TopTrackList timeRange={timeRange} />
                 </div>
             </div>
         </div>
