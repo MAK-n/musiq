@@ -69,10 +69,12 @@ public class UserController {
         @RequestParam(required = false) String from
     ) {
         Instant[] bounds = resolveBounds(range, from, to);
-        List<Song> songs = playRecordRepository.findTopSongsByUserBetween(
+        List<Object[]> rows = playRecordRepository.findTopSongsWithCountByUserBetween(
             currentUser(), bounds[0], bounds[1], PageRequest.of(0, 50)
         );
-        return ResponseEntity.ok(songs.stream().map(this::toTrackDto).toList());
+        return ResponseEntity.ok(rows.stream()
+            .map(row -> toTrackDto((Song) row[0], (Long) row[1]))
+            .toList());
     }
 
     @GetMapping("/top-artists")
@@ -95,7 +97,7 @@ public class UserController {
         List<PlayRecord> records = playRecordRepository
             .findByUserOrderByPlayedAtDesc(currentUser(), PageRequest.of(0, 50));
         return ResponseEntity.ok(records.stream()
-            .map(r -> new RecentlyPlayedDto(toTrackDto(r.getSong()), r.getPlayedAt()))
+            .map(r -> new RecentlyPlayedDto(toTrackDto(r.getSong(), 0), r.getPlayedAt()))
             .toList());
     }
 
@@ -103,7 +105,7 @@ public class UserController {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private TopTrackDto toTrackDto(Song song) {
+    private TopTrackDto toTrackDto(Song song, long playCount) {
         List<ArtistDto> artists = song.getArtists().stream()
             .map(a -> new ArtistDto(a.getSpotifyId(), a.getName(), a.getImageUrl()))
             .toList();
@@ -113,7 +115,8 @@ public class UserController {
             song.getImageUrl(),
             song.getDurationMs(),
             song.getAlbum().getName(),
-            artists
+            artists,
+            playCount
         );
     }
 }

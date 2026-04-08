@@ -8,5 +8,6 @@ public record TopTrackDto(
     String imageUrl,
     long durationMs,
     String albumName,
-    List<ArtistDto> artists
+    List<ArtistDto> artists,
+    long playCount
 ) {}

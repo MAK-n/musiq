@@ -24,8 +24,8 @@ public interface PlayRecordRepository extends JpaRepository<PlayRecord, Long> {
     @Query("SELECT a FROM PlayRecord pr JOIN pr.song.artists a WHERE pr.user = :user AND pr.playedAt > :since GROUP BY a ORDER BY COUNT(pr) DESC")
     List<Artist> findTopArtistsByUser(@Param("user") User user, @Param("since") Instant since, Pageable pageable);
 
-    @Query("SELECT pr.song FROM PlayRecord pr WHERE pr.user = :user AND pr.playedAt > :from AND pr.playedAt <= :to GROUP BY pr.song ORDER BY COUNT(pr) DESC")
-    List<Song> findTopSongsByUserBetween(@Param("user") User user, @Param("from") Instant from, @Param("to") Instant to, Pageable pageable);
+    @Query("SELECT pr.song, COUNT(pr) FROM PlayRecord pr WHERE pr.user = :user AND pr.playedAt > :from AND pr.playedAt <= :to GROUP BY pr.song ORDER BY COUNT(pr) DESC")
+    List<Object[]> findTopSongsWithCountByUserBetween(@Param("user") User user, @Param("from") Instant from, @Param("to") Instant to, Pageable pageable);
 
     @Query("SELECT a FROM PlayRecord pr JOIN pr.song.artists a WHERE pr.user = :user AND pr.playedAt > :from AND pr.playedAt <= :to GROUP BY a ORDER BY COUNT(pr) DESC")
     List<Artist> findTopArtistsByUserBetween(@Param("user") User user, @Param("from") Instant from, @Param("to") Instant to, Pageable pageable);

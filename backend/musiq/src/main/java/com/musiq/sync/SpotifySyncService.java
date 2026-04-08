@@ -1,7 +1,10 @@
 package com.musiq.sync;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -70,10 +73,14 @@ public class SpotifySyncService {
         String token = getValidAccessToken(user);
         SpotifyRecentlyPlayedDto response = spotifyService.getRecentlyPlayed(token);
 
+        Set<String> seenArtistIds = new LinkedHashSet<>();
+
         for (SpotifyRecentlyPlayedDto.PlayHistoryDto item : response.items()) {
             Album album = syncAlbum(item.track().album());
             List<Artist> artists = syncArtists(item.track().artists());
             Song song = syncSong(item.track(), album, artists);
+
+            item.track().artists().forEach(a -> seenArtistIds.add(a.id()));
 
             if (!playRecordRepository.existsByUserAndSongAndPlayedAt(user, song, item.playedAt())) {
                 PlayRecord record = PlayRecord.builder()
@@ -82,6 +89,27 @@ public class SpotifySyncService {
                     .playedAt(item.playedAt())
                     .build();
                 playRecordRepository.save(record);
+            }
+        }
+
+        enrichArtistImages(token, new ArrayList<>(seenArtistIds));
+    }
+
+    private void enrichArtistImages(String token, List<String> artistIds) {
+        if (artistIds.isEmpty()) return;
+        for (int i = 0; i < artistIds.size(); i += 50) {
+            List<String> batch = artistIds.subList(i, Math.min(i + 50, artistIds.size()));
+            try {
+                List<SpotifyArtistDto> fullArtists = spotifyService.getArtistsByIds(token, batch);
+                for (SpotifyArtistDto artistDto : fullArtists) {
+                    if (artistDto == null || artistDto.images() == null || artistDto.images().isEmpty()) continue;
+                    artistRepository.findBySpotifyId(artistDto.id()).ifPresent(artist -> {
+                        artist.setImageUrl(artistDto.images().get(0).url());
+                        artistRepository.save(artist);
+                    });
+                }
+            } catch (Exception e) {
+                // Non-fatal: image enrichment failure should never break login
             }
         }
     }
@@ -117,8 +145,11 @@ public class SpotifySyncService {
         return artistRepository.findBySpotifyId(artistDto.id())
             .map(existing -> {
                 existing.setName(artistDto.name());
-                existing.setImageUrl(artistDto.images() == null || artistDto.images().isEmpty()
-                ? null : artistDto.images().get(0).url());
+                // existing.setImageUrl(artistDto.images() == null || artistDto.images().isEmpty()
+                // ? null : artistDto.images().get(0).url());
+                if(artistDto.images() != null && !artistDto.images().isEmpty()){
+                    existing.setImageUrl(artistDto.images().get(0).url());
+                }
                 return artistRepository.save(existing);
             })
             .orElseGet(() -> artistRepository.save(Artist.builder()

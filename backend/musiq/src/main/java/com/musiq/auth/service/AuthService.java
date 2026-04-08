@@ -59,6 +59,7 @@ public class AuthService {
 
         // 4 - Sync User Data
         spotifySyncService.syncRecentlyPlayed(user);
+        spotifySyncService.syncTopArtists(user, "long_term");
 
         // 5- Generate JWT token
         String jwt = jwtService.generateToken(user.getId());

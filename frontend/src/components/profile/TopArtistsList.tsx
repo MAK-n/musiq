@@ -6,7 +6,41 @@ import styles from './TopArtistsList.module.css';
 interface Artist {
     spotifyId: string;
     name: string;
-    imageUrl: string;
+    imageUrl: string | null;
+}
+
+const PLACEHOLDER_COLORS = [
+    '#1a3a2a', '#2a1a3a', '#3a2a1a', '#1a2a3a',
+    '#3a1a2a', '#1a3a3a', '#2a2a1a', '#1a1a3a',
+];
+
+function artistColor(name: string): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return PLACEHOLDER_COLORS[Math.abs(hash) % PLACEHOLDER_COLORS.length];
+}
+
+function ArtistImage({ artist, className }: { artist: Artist; className: string }) {
+    const [failed, setFailed] = useState(false);
+    if (artist.imageUrl && !failed) {
+        return (
+            <img
+                src={artist.imageUrl}
+                alt={artist.name}
+                className={className}
+                onError={() => setFailed(true)}
+            />
+        );
+    }
+    return (
+        <div
+            className={styles.artistPlaceholder}
+            style={{ backgroundColor: artistColor(artist.name) }}
+            aria-label={artist.name}
+        >
+            {artist.name.charAt(0).toUpperCase()}
+        </div>
+    );
 }
 
 interface Props{
@@ -50,7 +84,7 @@ export default function TopArtistsList({timeRange}: Props) {
                 <ul className={gridClass}>
                     {data.slice(0, artistCount).map((artist, i) => (
                         <li key={artist.spotifyId} className={styles.artistCard}>
-                            <img src={artist.imageUrl} alt={artist.name} className={styles.artistImage} />
+                            <ArtistImage artist={artist} className={styles.artistImage} />
                             <span className={styles.badge}>{i + 1}</span>
                             <span className={styles.artistName}>{artist.name}</span>
                         </li>

@@ -21,13 +21,17 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 88px) / 12); /* 12 visible + 11 gaps × 8px */
     gap: 8px;
     overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
-    padding-bottom: 6px;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.list::-webkit-scrollbar {
+    display: none;
 }
 
 .item {
@@ -39,11 +43,9 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.15s;
-    min-width: 120px;
-    max-width: 120px;
-    flex-shrink: 0;
     background-color: var(--color-surface-3);
     border: 1px solid var(--color-border);
+    min-width: 0;
 }
 
 .item:hover {
@@ -92,9 +94,7 @@
 }
 
 .skeletonRow {
-    min-width: 120px;
-    max-width: 120px;
-    flex-shrink: 0;
+    min-width: 0;
     border-radius: 10px;
     overflow: hidden;
     background-color: var(--color-surface-3);

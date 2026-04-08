@@ -3,7 +3,7 @@ import { fetchTopTracks, type TimeRange, timeRangeKey } from "../../api/userApi"
 import styles from './TopTrackList.module.css';
 
 interface Artist { name: string; }
-interface Track { spotifyId: string; name: string; imageUrl: string; albumName: string; artists: Artist[]; }
+interface Track { spotifyId: string; name: string; imageUrl: string; albumName: string; artists: Artist[]; playCount: number; }
 interface Props { timeRange: TimeRange; }
 
 export default function TopTrackList({ timeRange }: Props) {
@@ -40,6 +40,9 @@ export default function TopTrackList({ timeRange }: Props) {
                             <div className={styles.info}>
                                 <p className={styles.trackName}>{track.name}</p>
                                 <p className={styles.artistName}>{track.artists.map(a => a.name).join(', ')}</p>
+                                <span className={styles.playCount}>
+                                    {(track.playCount ?? 0)} {(track.playCount ?? 0) === 1 ? 'play' : 'plays'}
+                                </span>
                             </div>
                         </li>
                     ))}

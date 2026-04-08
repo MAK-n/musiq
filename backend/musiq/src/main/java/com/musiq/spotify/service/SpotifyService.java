@@ -8,8 +8,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 import com.musiq.spotify.config.SpotifyProperties;
 import com.musiq.spotify.dto.SpotifyArtistDto;
+import com.musiq.spotify.dto.SpotifyArtistsBatchDto;
 import com.musiq.spotify.dto.SpotifyRecentlyPlayedDto;
 import com.musiq.spotify.dto.SpotifyTokenResponse;
 import com.musiq.spotify.dto.SpotifyTopItemsDto;
@@ -102,6 +105,18 @@ public class SpotifyService {
         .retrieve()
         .bodyToMono(new ParameterizedTypeReference<SpotifyTopItemsDto<SpotifyArtistDto>>() {})
         .block();
+    }
+
+    public List<SpotifyArtistDto> getArtistsByIds(String accessToken, List<String> ids) {
+        String idsParam = String.join(",", ids);
+        SpotifyArtistsBatchDto response = spotifyApiClient
+            .get()
+            .uri("/artists?ids=" + idsParam)
+            .headers(headers -> headers.setBearerAuth(accessToken))
+            .retrieve()
+            .bodyToMono(SpotifyArtistsBatchDto.class)
+            .block();
+        return (response != null && response.artists() != null) ? response.artists() : List.of();
     }
 
     public SpotifyRecentlyPlayedDto getRecentlyPlayed(String accessToken){
