@@ -4,6 +4,7 @@ build/
 
 # Ignore IDE files
 .*
+!.github
 !.gitignore
 !.gitattributes
 
